@@ -54,12 +54,18 @@ namespace BackEcommerce.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
-            if (id != cliente.Id)
+            var clientefind = await _context.Clientes.FindAsync(id);
+            if (id != clientefind.Id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(cliente).State = EntityState.Modified;
+            
+            clientefind!.Nombre = cliente.Nombre;
+            clientefind!.Apellidos = cliente.Apellidos;
+            clientefind.Correo = cliente.Correo;
+            clientefind.Telefono = cliente.Telefono;
+            
+            _context.Entry(clientefind).State = EntityState.Modified;
 
             try
             {
@@ -77,7 +83,7 @@ namespace BackEcommerce.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Clientes

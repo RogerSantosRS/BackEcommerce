@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEcommerce.Models
 {
@@ -11,12 +12,14 @@ namespace BackEcommerce.Models
         }
 
         public int Id { get; set; }
-        public string Nombre { get; set; } = null!;
-        public string Apellidos { get; set; } = null!;
-        public string Telefono { get; set; } = null!;
-        public string Correo { get; set; } = null!;
-        public string Estatus { get; set; } = null!;
-        public DateTime FechaCreate { get; set; }
+        public string? Nombre { get; set; } = null!;
+        public string? Apellidos { get; set; } = null!;
+        public string? Telefono { get; set; } = null!;
+        
+        public string? Correo { get; set; } = null!;
+        public string? Estatus { get; set; } = null!;
+     
+        public DateTime? FechaCreate { get; set; }
         public DateTime? FechaDelete { get; set; }
 
         public virtual ICollection<Pedido> Pedidos { get; set; }
