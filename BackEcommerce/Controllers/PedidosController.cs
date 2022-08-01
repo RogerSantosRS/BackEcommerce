@@ -15,9 +15,9 @@ namespace BackEcommerce.Controllers
     {
         private readonly bdecomerceContext _context;
 
-        public PedidosController(bdecomerceContext context)
+        public PedidosController()
         {
-            _context = context;
+            _context = new bdecomerceContext();
         }
 
         // GET: api/Pedidos

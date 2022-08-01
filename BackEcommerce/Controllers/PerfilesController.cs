@@ -15,19 +15,19 @@ namespace BackEcommerce.Controllers
     {
         private readonly bdecomerceContext _context;
 
-        public PerfilesController(bdecomerceContext context)
+        public PerfilesController()
         {
-            _context = context;
+            _context = new bdecomerceContext();
         }
 
         // GET: api/Perfiles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Perfil>>> GetPerfils()
         {
-          if (_context.Perfils == null)
-          {
-              return NotFound();
-          }
+          //if (_context.Perfils == null)
+          //{
+          //    return NotFound();
+          //}
             return await _context.Perfils.ToListAsync();
         }
 
@@ -35,10 +35,10 @@ namespace BackEcommerce.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Perfil>> GetPerfil(int id)
         {
-          if (_context.Perfils == null)
-          {
-              return NotFound();
-          }
+          //if (_context.Perfils == null)
+          //{
+          //    return NotFound();
+          //}
             var perfil = await _context.Perfils.FindAsync(id);
 
             if (perfil == null)
