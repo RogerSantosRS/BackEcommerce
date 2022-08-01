@@ -107,20 +107,34 @@ namespace BackEcommerce.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            if (_context.Usuarios == null)
+            var usuariodelete = await _context.Usuarios.FindAsync(id);
+            if (id != usuariodelete.Id)
             {
-                return NotFound();
-            }
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
+            usuariodelete.Estatus = "b";
+            usuariodelete.FechaDelete = DateTime.Now;
 
-            return NoContent();
+            _context.Entry(usuariodelete).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
         }
 
         private bool UsuarioExists(int id)

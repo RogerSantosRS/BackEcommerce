@@ -99,20 +99,34 @@ namespace BackEcommerce.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerfil(int id)
         {
-            if (_context.Perfils == null)
+            var perfildelete = await _context.Perfils.FindAsync(id);
+            if (id != perfildelete.Id)
             {
-                return NotFound();
-            }
-            var perfil = await _context.Perfils.FindAsync(id);
-            if (perfil == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Perfils.Remove(perfil);
-            await _context.SaveChangesAsync();
+            perfildelete.Estatus = "b";
+            perfildelete.FechaDelete = DateTime.Now;
 
-            return NoContent();
+            _context.Entry(perfildelete).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PerfilExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
         }
 
         private bool PerfilExists(int id)

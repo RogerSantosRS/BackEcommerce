@@ -12,11 +12,11 @@ namespace BackEcommerce.Models
         }
 
         public int Id { get; set; }
-        public string? Nombre { get; set; } = null!;
-        public string? Apellidos { get; set; } = null!;
-        public string? Telefono { get; set; } = null!;
+        public string Nombre { get; set; }
+        public string Apellidos { get; set; }
+        public string Telefono { get; set; }
         
-        public string? Correo { get; set; } = null!;
+        public string Correo { get; set; }
         public string? Estatus { get; set; } = null!;
      
         public DateTime? FechaCreate { get; set; }

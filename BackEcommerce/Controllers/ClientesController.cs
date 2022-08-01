@@ -93,13 +93,19 @@ namespace BackEcommerce.Controllers
         {
           if (_context.Clientes == null)
           {
-              return Problem("Entity set 'bdecomerceContext.Clientes'  is null.");
+              return BadRequest("Entity set 'bdecomerceContext.Clientes'  is null.");
           }
             cliente.Estatus = "a";
             cliente.FechaCreate = DateTime.Now;
             _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
-
+            if (cliente.Nombre ==""|| cliente.Telefono ==""|| cliente.Correo ==""|| cliente.Apellidos =="") 
+            {
+                return Problem("Entity set 'bdecomerceContext.Clientes'  is null.");
+            }
+            else
+            {
+                await _context.SaveChangesAsync();
+            }
             return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
         }
 
@@ -107,21 +113,36 @@ namespace BackEcommerce.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            if (_context.Clientes == null)
+            var clientedelete = await _context.Clientes.FindAsync(id);
+            if (id != clientedelete.Id)
             {
-                return NotFound();
-            }
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
+            clientedelete.Estatus = "b";
+            clientedelete.FechaDelete = DateTime.Now;
 
-            return NoContent();
+            _context.Entry(clientedelete).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClienteExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
         }
+    
 
         private bool ClienteExists(int id)
         {
