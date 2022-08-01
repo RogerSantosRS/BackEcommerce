@@ -50,7 +50,7 @@ namespace BackEcommerce.Controllers
         }
 
         // PUT: api/Clientes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+      
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
@@ -87,7 +87,7 @@ namespace BackEcommerce.Controllers
         }
 
         // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
@@ -95,6 +95,8 @@ namespace BackEcommerce.Controllers
           {
               return Problem("Entity set 'bdecomerceContext.Clientes'  is null.");
           }
+            cliente.Estatus = "a";
+            cliente.FechaCreate = DateTime.Now;
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 

@@ -55,19 +55,19 @@ namespace BackEcommerce.Controllers
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
             var usuariofind = await _context.Usuarios.FindAsync(id);
-            //if (id != usuariofind.Id)
-            //{
-            //    return BadRequest();
-            //}
-            //TODO modificar estos campos para que coincidan con usuarios
-            //usuariofind!.Nombre = usuario.Nombre;
-            //usuariofind!.Apellidos = usuario.Apellidos;
-            //usuariofind.Correo = usuario.Correo;
-            //usuariofind.Telefono = usuario.Telefono;
+            if (id != usuariofind.Id)
+            {
+                return BadRequest();
+            }
+           
+            usuariofind!.Nombre = usuario.Nombre;
+            usuariofind!.Apellidos = usuario.Apellidos;
+            usuariofind.Usuario1 = usuario.Usuario1;
+            usuariofind.Contrasenia = usuario.Contrasenia;
 
             _context.Entry(usuariofind).State = EntityState.Modified;
 
-            _context.Entry(usuario).State = EntityState.Modified;
+            //_context.Entry(usuario).State = EntityState.Modified;
 
             try
             {
@@ -85,7 +85,7 @@ namespace BackEcommerce.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Usuarios
