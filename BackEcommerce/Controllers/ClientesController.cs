@@ -24,11 +24,13 @@ namespace BackEcommerce.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
-          //if (_context.Clientes == null)
-          //{
-          //    return NotFound();
-          //}
-            return await _context.Clientes.ToListAsync();
+            //if (_context.Clientes == null)
+            //{
+            //    return NotFound();
+            //}
+            //var d = await db.Where(x => x.FirstName == "Jack").ToListAsync();
+            //para filtrar datos no borrados por medio de una condicion con linq
+            return await _context.Clientes.Where(x => x.FechaDelete ==null).ToListAsync();
         }
 
         // GET: api/Clientes/5
@@ -147,6 +149,10 @@ namespace BackEcommerce.Controllers
         private bool ClienteExists(int id)
         {
             return (_context.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        private bool ClienteExistsborrados()
+        {
+            return (_context.Clientes?.Any(e => e.FechaDelete ==null)).GetValueOrDefault();
         }
     }
 }
