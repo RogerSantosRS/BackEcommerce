@@ -100,7 +100,8 @@ namespace BackEcommerce.Controllers
             cliente.Estatus = "a";
             cliente.FechaCreate = DateTime.Now;
             _context.Clientes.Add(cliente);
-            if (cliente.Nombre ==""|| cliente.Telefono ==""|| cliente.Correo ==""|| cliente.Apellidos =="") 
+            
+            if (string.IsNullOrEmpty (cliente.Nombre) || string.IsNullOrEmpty(cliente.Telefono)|| string.IsNullOrEmpty( cliente.Correo)) 
             {
                 return Problem("Entity set 'bdecomerceContext.Clientes'  is null.");
             }
@@ -150,9 +151,9 @@ namespace BackEcommerce.Controllers
         {
             return (_context.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        private bool ClienteExistsborrados()
-        {
-            return (_context.Clientes?.Any(e => e.FechaDelete ==null)).GetValueOrDefault();
-        }
+        //private bool ClienteExistsborrados()
+        //{
+        //    return (_context.Clientes?.Any(e => e.FechaDelete ==null)).GetValueOrDefault();
+        //}
     }
 }

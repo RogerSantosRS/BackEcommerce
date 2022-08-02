@@ -85,13 +85,22 @@ namespace BackEcommerce.Controllers
         [HttpPost]
         public async Task<ActionResult<Perfil>> PostPerfil(Perfil perfil)
         {
-          if (_context.Perfils == null)
-          {
-              return Problem("Entity set 'bdecomerceContext.Perfils'  is null.");
-          }
+            if (_context.Clientes == null)
+            {
+                return BadRequest("Entity set 'bdecomerceContext.Clientes'  is null.");
+            }
+            perfil.Estatus = "a";
+            perfil.FechaCreate = DateTime.Now;
             _context.Perfils.Add(perfil);
-            await _context.SaveChangesAsync();
 
+            if (string.IsNullOrEmpty(perfil.Nombre))
+            {
+                return Problem("Entity set 'bdecomerceContext.Clientes'  is null.");
+            }
+            else
+            {
+                await _context.SaveChangesAsync();
+            }
             return CreatedAtAction("GetPerfil", new { id = perfil.Id }, perfil);
         }
 
