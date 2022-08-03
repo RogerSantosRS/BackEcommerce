@@ -28,7 +28,7 @@ namespace BackEcommerce.Controllers
           {
               return NotFound();
           }
-            return await _context.Productos.ToListAsync();
+            return await _context.Productos.Where(x=> x.FechaDelete==null).ToListAsync();
         }
 
         // GET: api/Productos/5
@@ -54,12 +54,18 @@ namespace BackEcommerce.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProducto(int id, Producto producto)
         {
-            if (id != producto.Id)
+            var productofind = await _context.Productos.FindAsync(id);
+            if (id != productofind.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(producto).State = EntityState.Modified;
+            productofind.Nombre = producto.Nombre;
+            productofind.Imagen = producto.Imagen;
+            productofind.Codigo= producto.Codigo;   
+            productofind.Precio = producto.Precio;
+            productofind.Stock= producto.Stock;
+            _context.Entry(productofind).State = EntityState.Modified;
 
             try
             {
@@ -77,7 +83,7 @@ namespace BackEcommerce.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Productos
@@ -89,7 +95,10 @@ namespace BackEcommerce.Controllers
           {
               return Problem("Entity set 'bdecomerceContext.Productos'  is null.");
           }
+            producto.Estatus = "a";
+            producto.FechaCreate = DateTime.Now;
             _context.Productos.Add(producto);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProducto", new { id = producto.Id }, producto);
