@@ -12,8 +12,8 @@ namespace BackEcommerce.Models
 
         public int Id { get; set; }
         public string Nombre { get; set; } = null!;
-        public string Estatus { get; set; } = null!;
-        public DateTime FechaCreate { get; set; }
+        public string? Estatus { get; set; } = null!;
+        public DateTime? FechaCreate { get; set; }
         public DateTime? FechaDelete { get; set; }
 
         public virtual ICollection<Usuario> Usuarios { get; set; }

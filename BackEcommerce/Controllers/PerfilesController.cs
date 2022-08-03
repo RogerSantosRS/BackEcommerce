@@ -28,7 +28,7 @@ namespace BackEcommerce.Controllers
           //{
           //    return NotFound();
           //}
-            return await _context.Perfils.ToListAsync();
+            return await _context.Perfils.Where(x=>x.FechaDelete==null).ToListAsync();
         }
 
         // GET: api/Perfiles/5
@@ -54,12 +54,15 @@ namespace BackEcommerce.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerfil(int id, Perfil perfil)
         {
-            if (id != perfil.Id)
+            var perfilfind = await _context.Perfils.FindAsync(id);
+            if (id != perfilfind.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(perfil).State = EntityState.Modified;
+            perfilfind.Nombre = perfil.Nombre;
+
+            _context.Entry(perfilfind).State = EntityState.Modified;
 
             try
             {
