@@ -28,7 +28,7 @@ namespace BackEcommerce.Controllers
           //{
           //    return NotFound();
           //}
-            return await _context.Usuarios.ToListAsync();
+            return await _context.Usuarios.Where(x => x.FechaDelete == null).ToListAsync();
         }
 
         // GET: api/Usuarios/5
@@ -60,8 +60,8 @@ namespace BackEcommerce.Controllers
                 return BadRequest();
             }
            
-            usuariofind!.Nombre = usuario.Nombre;
-            usuariofind!.Apellidos = usuario.Apellidos;
+            usuariofind.Nombre = usuario.Nombre;
+            usuariofind.Apellidos = usuario.Apellidos;
             usuariofind.Usuario1 = usuario.Usuario1;
             usuariofind.Contrasenia = usuario.Contrasenia;
 
@@ -97,6 +97,8 @@ namespace BackEcommerce.Controllers
           {
               return Problem("Entity set 'bdecomerceContext.Usuarios'  is null.");
           }
+            usuario.Estatus = "a";
+            usuario.FechaCreate = DateTime.Now;
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
