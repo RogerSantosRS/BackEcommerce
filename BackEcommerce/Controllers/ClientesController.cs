@@ -22,7 +22,7 @@ namespace BackEcommerce.Controllers
 
         // GET: api/Clientes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        public async Task<ActionResult<ClienteDto>> GetClientes(string? nombre)
         {
             //if (_context.Clientes == null)
             //{
@@ -30,7 +30,30 @@ namespace BackEcommerce.Controllers
             //}
             //var d = await db.Where(x => x.FirstName == "Jack").ToListAsync();
             //para filtrar datos no borrados por medio de una condicion con linq
-            return await _context.Clientes.Where(x => x.FechaDelete ==null).ToListAsync();
+            var valores = _context.Clientes.Select(
+                w => new Cliente()
+                {
+                    Id = w.Id,
+                    Nombre = w.Nombre,
+                    Apellidos =w.Apellidos,
+                    FechaDelete=w.FechaDelete
+                }
+                ).Where(x => x.FechaDelete == null);
+            if (!String.IsNullOrEmpty(nombre))
+            {
+                valores = valores.Where(x => (x.Nombre + " " + x.Apellidos).Contains(nombre));
+            }
+            
+            int pagina = 1;
+            int cantidad = 5;
+            int totalReg = valores.Count();
+            ClienteDto objCliente = new ClienteDto();
+            objCliente.ListaClientes = await valores.Skip((pagina - 1) * cantidad).Take(cantidad).ToListAsync();
+            objCliente.Pagina = pagina;
+            objCliente.Cantidad = cantidad;
+            objCliente.Total = totalReg;
+            return objCliente; 
+
         }
 
         // GET: api/Clientes/5
